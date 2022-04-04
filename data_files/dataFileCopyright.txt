@@ -1,0 +1,7 @@
+These datafiles are from https://people.sc.fsu.edu/~jburkardt/datasets/knapsack_01/knapsack_01.html
+
+from there:
+
+Licensing:
+The computer code and data files described and made available on this web page 
+are distributed under the GNU LGPL license (https://people.sc.fsu.edu/~jburkardt/txt/gnu_lgpl.txt)
