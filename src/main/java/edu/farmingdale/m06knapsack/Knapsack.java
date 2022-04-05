@@ -82,7 +82,12 @@ public class Knapsack {
             }
         }
         
-        rv.addItem("test", getTotalDollarValue(), getTotalWeightSize());//THIS IS WHAT NEEDS TO HAPPEN!!!!
+        
+       
+        
+        int max = K[items.size()][maxWeight];
+        rv.addItem("Best Items", getTotalDollarValue(), max);
+       // rv.addItem("test", getTotalDollarValue(),);//THIS IS WHAT NEEDS TO HAPPEN!!!!
         return rv;
     }
 
