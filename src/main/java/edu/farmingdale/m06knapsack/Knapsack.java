@@ -58,41 +58,52 @@ public class Knapsack {
     public Knapsack solve(int maxWeight) {
         Knapsack rv = new Knapsack();
 
-        // this is the part you write. Come to class for the clues as to how
-        int[] w = new int[items.size()];
+        int[] w = new int[items.size()];//i make two arrays, one for weight and one for value, helped me solve easier
         int[] v = new int[items.size()];
 
-        for (int i = 0; i < items.size(); i++) {
+        for (int i = 0; i < items.size(); i++) {//fill those arrays 
             w[i] = items.get(i).weightSize;
             v[i] = items.get(i).dollarValue;
         }
 
-        int K[][] = new int[items.size() + 1][maxWeight + 1];
+        int K[][] = new int[items.size() + 1][maxWeight + 1];//create a 2d array, building bottom up made this come to mind
 
-        for (int i = 0; i <= items.size(); i++) {
-            for (int j = 0; j <= maxWeight; j++) {
-                if (i == 0 || j == 0) {
-                    K[i][j] = 0;
-                } else if (w[i - 1] <= j) {
-                    K[i][j] = max(v[i - 1] + K[i - 1][j - w[i - 1]], K[i - 1][j]);
-                    
+        for (int numItems = 0; numItems <= items.size(); numItems++) {//go through number of items
+            for (int weigth = 0; weigth <= maxWeight; weigth++) {//go through weight
+                if (numItems == 0 || weigth == 0) {//this is for 0 row, since 0 weight means 0 value 
+                    K[numItems][weigth] = 0;//sets the slot to 0 if the number of items is 0
+                } else if (w[numItems - 1] <= weigth) {//if the left is smaller
+                    K[numItems][weigth] = max(v[numItems - 1] + K[numItems - 1][weigth - w[numItems - 1]], K[numItems - 1][weigth]);//finds the bigger of the two then sets the slot to that value
+
                 } else {
-                    K[i][j] = K[i - 1][j];
+                    K[numItems][weigth] = K[numItems - 1][weigth];//or just set the value to whatever is immedately left of the slot
                 }
             }
         }
-        
-        
-       
-        
-        int max = K[items.size()][maxWeight];
-        rv.addItem("Best Items", getTotalDollarValue(), max);
-       // rv.addItem("test", getTotalDollarValue(),);//THIS IS WHAT NEEDS TO HAPPEN!!!!
+
+        int startHere = K[items.size()][maxWeight];//start at the top right of the 2d array
+        int weight = maxWeight;//temp weight, it changes as we add items to knapsack
+
+        for (int i = items.size(); i > 0 && startHere > 0; i--) {
+            if (K[i - 1][weight] != startHere) {//this is how to add to knap sack, if a cell and the cell to the left are not equal, then the item is added
+                rv.addItem(items.get(i - 1).name, items.get(i - 1).weightSize, items.get(i - 1).dollarValue);
+
+                startHere = startHere - v[i - 1];//adjust values since a knapsack now has a value in it 
+                weight = weight - w[i - 1];//adjust weight since is something in the knapsack now 
+            }
+
+        }
+
         return rv;
     }
 
     private int max(int a, int b) {
-        return (a > b) ? a : b;
+        if (a > b) {
+            return a;
+        } else {
+            return b;
+        }
+
     }
 
     public String toString() {
